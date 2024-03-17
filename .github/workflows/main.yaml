@@ -1,0 +1,36 @@
+name: Build App
+
+on: [push, pull_request]
+
+jobs:
+
+  Windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Run CMake
+        run: |
+          mkdir build
+          cd build
+          cmake ..\src
+
+      - name: Build
+        run: |
+          cmake --build build --config release
+      
+      - name: Run demo
+        run: |
+          .\bin\Release\hex.exe .\docs\img\square.png
+      
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: github.ref == 'refs/heads/master'
+        with:
+          tag_name: latest
+          files: |
+            bin/Release/hex.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

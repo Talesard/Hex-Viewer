@@ -13,10 +13,10 @@ bool ReadFile (const std::string &theFilePath, std::vector<unsigned char> &theBu
     if (!anInputStream) return false;
     std::vector <unsigned char> aBuffer (std::istreambuf_iterator<char> (anInputStream), {});
     theBuffer = aBuffer;
+    anInputStream.close();
     return true;
 }
 
-// Bad solution.
 void PrintAdrr16 (size_t theValue, std::ostringstream& theStream) {
     unsigned char* aBytes = reinterpret_cast <unsigned char*> (&theValue);
     int aSetwValues[4] = {1, 2, 2, 3};
